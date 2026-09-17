@@ -1,0 +1,5 @@
+import 'package:flutter/material.dart';
+class MercDealTheme {
+  static const green=Color(0xFF35F28B), blue=Color(0xFF4DA3FF), navy=Color(0xFF07111F), card=Color(0xFF0C1A29);
+  static ThemeData dark()=>ThemeData(useMaterial3:true,brightness:Brightness.dark,scaffoldBackgroundColor:navy,colorScheme:ColorScheme.fromSeed(seedColor:green,brightness:Brightness.dark),fontFamily:'Roboto',appBarTheme:const AppBarTheme(backgroundColor:navy,elevation:0),inputDecorationTheme:InputDecorationTheme(filled:true,fillColor:card,border:OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(18)),borderSide:BorderSide.none),enabledBorder:OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(18)),borderSide:BorderSide.none),focusedBorder:OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(18)),borderSide:BorderSide(color:green))),chipTheme:ChipThemeData(backgroundColor:card,selectedColor:green.withValues(alpha:.18),labelStyle:const TextStyle(fontWeight:FontWeight.w700),side:BorderSide(color:Colors.white10),shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(14))));
+}
