@@ -53,7 +53,11 @@ class DealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(22),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(22),
       child: Container(

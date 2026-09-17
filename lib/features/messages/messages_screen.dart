@@ -32,9 +32,9 @@ class MessagesScreen extends StatelessWidget {
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.search, color: Colors.white38),
+                  Icon(Icons.search, color: const Color(0x61FFFFFF)),
                   SizedBox(width: 10),
-                  Text('Cerca nelle conversazioni', style: TextStyle(color: Colors.white38)),
+                  Text('Cerca nelle conversazioni', style: TextStyle(color: const Color(0x61FFFFFF))),
                 ],
               ),
             ),
@@ -104,7 +104,7 @@ class _Chat extends StatelessWidget {
           ),
           Column(
             children: [
-              Text(time, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+              Text(time, style: const TextStyle(color: const Color(0x61FFFFFF), fontSize: 10)),
               if (unread)
                 const Padding(
                   padding: EdgeInsets.only(top: 7),

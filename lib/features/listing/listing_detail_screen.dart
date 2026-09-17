@@ -59,7 +59,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
       const SizedBox(height: 14),
       ClipRRect(borderRadius: BorderRadius.circular(8), child: LinearProgressIndicator(value: x.progress, minHeight: 8, color: MercDealTheme.green, backgroundColor: Colors.white10)),
       const SizedBox(height: 12),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Partenza €${x.startPrice.toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: Colors.white38, fontSize: 11)), Text('Minimo privato', style: const TextStyle(color: Colors.white38, fontSize: 11))]),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Partenza €${x.startPrice.toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: const Color(0x61FFFFFF), fontSize: 11)), Text('Minimo privato', style: const TextStyle(color: const Color(0x61FFFFFF), fontSize: 11))]),
       const SizedBox(height: 12),
       Text('${x.followers} persone stanno seguendo questo affare', style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
     ]));

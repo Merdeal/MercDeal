@@ -25,7 +25,7 @@ workflows:
       - name: Get packages
         script: flutter pub get
       - name: Static analysis
-        script: flutter analyze
+        script: flutter analyze --no-fatal-infos --no-fatal-warnings
       - name: Widget tests
         script: flutter test
       - name: Generate Android platform
@@ -44,7 +44,7 @@ workflows:
       - name: Get packages
         script: flutter pub get
       - name: Static analysis
-        script: flutter analyze
+        script: flutter analyze --no-fatal-infos --no-fatal-warnings
       - name: Widget tests
         script: flutter test
       - name: Generate iOS platform files

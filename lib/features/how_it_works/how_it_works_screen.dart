@@ -7,101 +7,46 @@ class HowItWorksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Come funziona MercDeal',
-          style: TextStyle(fontWeight: FontWeight.w900),
-        ),
-      ),
+      appBar: AppBar(title: const Text('Come funziona MercDeal', style: TextStyle(fontWeight: FontWeight.w900))),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 30),
         children: [
-          const Text(
-            'Scegli il tuo percorso',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-          ),
+          const Text('Scegli il tuo percorso', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
           const SizedBox(height: 15),
-          _Flow(
-            Icons.storefront_outlined,
-            'SONO UN VENDITORE',
-            const [
-              'Crea il tuo annuncio',
-              'Scegli Compralo subito, Asta al ribasso o Proposta libera',
-              'Inserisci peso e dimensioni se spedisci',
-              'Completa la verifica venditore',
-              'Quando vendi: pagamento, etichetta e video imballaggio',
-              'A consegna conclusa lasciate entrambi una recensione',
-            ],
-          ),
+          _Flow(Icons.storefront_outlined, 'SONO UN VENDITORE', const [
+            'Crea il tuo annuncio',
+            'Scegli Compralo subito, Asta al ribasso o Proposta libera',
+            'Inserisci peso e dimensioni se spedisci',
+            'Completa la verifica venditore',
+            'Quando vendi: pagamento, etichetta e video imballaggio',
+            'A consegna conclusa lasciate entrambi una recensione',
+          ]),
           const SizedBox(height: 14),
-          _Flow(
-            Icons.shopping_bag_outlined,
-            'SONO UN ACQUIRENTE',
-            const [
-              'Scopri gli affari',
-              'Segui un prodotto e imposta il tuo prezzo obiettivo',
-              'Guarda il prezzo scendere di €0,20 al giorno',
-              'Fai un’offerta oppure compra subito',
-              'Vedi il costo reale della spedizione prima di confermare',
-              'Ricevi, controlla e conferma la ricezione',
-              'Lascia la recensione',
-            ],
-          ),
+          _Flow(Icons.shopping_bag_outlined, 'SONO UN ACQUIRENTE', const [
+            'Scopri gli affari',
+            'Segui un prodotto e imposta il tuo prezzo obiettivo',
+            'Guarda il prezzo scendere di €0,20 al giorno',
+            'Fai un’offerta oppure compra subito',
+            'Vedi il costo reale della spedizione prima di confermare',
+            'Ricevi, controlla e conferma la ricezione',
+            'Lascia la recensione',
+          ]),
           const SizedBox(height: 14),
           Container(
             padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: MercDealTheme.card,
-              borderRadius: BorderRadius.circular(22),
-            ),
+            decoration: BoxDecoration(color: MercDealTheme.card, borderRadius: BorderRadius.circular(22)),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '📉 L’asta al ribasso',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-                ),
+                Text('📉 L’asta al ribasso', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
                 SizedBox(height: 10),
-                Text(
-                  '€80,00',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
-                ),
-                Text(
-                  '↓ €79,80',
-                  style: TextStyle(
-                    color: MercDealTheme.green,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
-                  '↓ €79,60',
-                  style: TextStyle(
-                    color: MercDealTheme.green,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
-                  '↓ …',
-                  style: TextStyle(
-                    color: Color(0x61FFFFFF),
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
-                  '€65,00 · Prezzo minimo raggiunto',
-                  style: TextStyle(
-                    color: MercDealTheme.blue,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+                Text('€80,00', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+                Text('↓ €79,80', style: TextStyle(color: MercDealTheme.green, fontWeight: FontWeight.w800)),
+                Text('↓ €79,60', style: TextStyle(color: MercDealTheme.green, fontWeight: FontWeight.w800)),
+                Text('↓ …', style: TextStyle(color: const Color(0x61FFFFFF), fontWeight: FontWeight.w800)),
+                Text('€65,00 · Prezzo minimo raggiunto', style: TextStyle(color: MercDealTheme.blue, fontWeight: FontWeight.w800)),
                 SizedBox(height: 8),
-                Text(
-                  'Il minimo del venditore resta nascosto e il prezzo non scende oltre quella soglia.',
-                  style: TextStyle(
-                    color: Color(0x73FFFFFF),
-                    height: 1.35,
-                  ),
-                ),
+                Text('Il minimo del venditore resta nascosto e il prezzo non scende oltre quella soglia.', style: TextStyle(color: const Color(0x73FFFFFF), height: 1.35)),
               ],
             ),
           ),
@@ -125,26 +70,15 @@ class _Flow extends StatelessWidget {
       decoration: BoxDecoration(
         color: MercDealTheme.card,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: .06),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: .06)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, color: MercDealTheme.green),
-              const SizedBox(width: 9),
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.w900),
-              ),
-            ],
-          ),
+          Row(children: [Icon(icon, color: MercDealTheme.green), const SizedBox(width: 9), Text(title, style: const TextStyle(fontWeight: FontWeight.w900))]),
           const SizedBox(height: 12),
-          ...steps.asMap().entries.map(
-            (entry) => Padding(
+          ...steps.asMap().entries.map((entry) {
+            return Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,33 +87,15 @@ class _Flow extends StatelessWidget {
                     width: 25,
                     height: 25,
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      color: MercDealTheme.green,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${entry.key + 1}',
-                      style: const TextStyle(
-                        color: Color(0xFF04120B),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    decoration: const BoxDecoration(color: MercDealTheme.green, shape: BoxShape.circle),
+                    child: Text('${entry.key + 1}', style: const TextStyle(color: Color(0xFF04120B), fontSize: 11, fontWeight: FontWeight.w900)),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      entry.value,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        height: 1.25,
-                      ),
-                    ),
-                  ),
+                  Expanded(child: Text(entry.value, style: const TextStyle(color: Colors.white70, height: 1.25))),
                 ],
               ),
-            ),
-          ),
+            );
+          }),
         ],
       ),
     );

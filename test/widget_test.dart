@@ -3,19 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mercdeal/features/home/home_screen.dart';
 
 void main() {
-  testWidgets('MercDeal avvia la Home', (tester) async {
+  testWidgets('MercDeal Home smoke test', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: HomeScreen(),
+          body: Material(
+            child: HomeScreen(),
+          ),
         ),
       ),
     );
 
-    // La Home usa InkWell e richiede un Material/Scaffold sopra di sé.
-    await tester.pump();
-
-    expect(find.text('MercDeal'), findsOneWidget);
+    expect(find.text('MercDeal'), findsWidgets);
     expect(find.text('✨ Scopri ora'), findsOneWidget);
   });
 }

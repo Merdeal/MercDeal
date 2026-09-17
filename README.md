@@ -77,3 +77,7 @@ Prima della pubblicazione:
 5. configurare signing Android/iOS;
 6. eseguire `flutter analyze`, `flutter test` e build release in CI;
 7. completare privacy, termini, KYC e requisiti store.
+
+
+## V3 final source package
+This package contains the consolidated V3 UI, product flows, Supabase foundations, asset directories and Codemagic configuration. External production providers require their own credentials and webhook configuration.

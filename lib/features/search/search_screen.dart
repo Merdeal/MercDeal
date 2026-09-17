@@ -172,7 +172,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                     const SizedBox(height: 5),
-                    Text('${x.category} · ${x.location}', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                    Text('${x.category} · ${x.location}', style: const TextStyle(color: const Color(0x61FFFFFF), fontSize: 11)),
                     const SizedBox(height: 7),
                     Text('€${x.price.toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 3),
