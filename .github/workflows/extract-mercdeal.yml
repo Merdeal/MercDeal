@@ -1,1 +1,70 @@
+name: Prepare MercDeal
 
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract MercDeal
+        shell: bash
+        run: |
+          set -e
+
+          test -f mercdeal_final.zip
+
+          rm -rf /tmp/mercdeal
+          mkdir -p /tmp/mercdeal
+
+          unzip -q mercdeal_final.zip -d /tmp/mercdeal
+
+          PUBSPEC=$(find /tmp/mercdeal -type f -name "pubspec.yaml" -print -quit)
+
+          if [ -z "$PUBSPEC" ]; then
+            echo "pubspec.yaml non trovato"
+            exit 1
+          fi
+
+          PROJECT_DIR=$(dirname "$PUBSPEC")
+
+          cp -a "$PROJECT_DIR"/. .
+
+          rm -f mercdeal_final.zip
+
+      - name: Verify project
+        shell: bash
+        run: |
+          set -e
+
+          test -f pubspec.yaml
+          test -d lib
+          test -d assets
+          test -d supabase
+          test -d test
+          test -f codemagic.yaml
+
+          echo "MercDeal project structure OK"
+
+      - name: Commit extracted project
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da salvare."
+            exit 0
+          fi
+
+          git commit -m "Prepare MercDeal Flutter project"
+          git push
