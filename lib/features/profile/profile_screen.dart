@@ -150,30 +150,18 @@ class ProfileScreen extends StatelessWidget {
             const SecurityScreen(),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const AuthScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.login_rounded),
-              label: const Text('Accedi / Registrati'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: MercDealTheme.green,
-                side: BorderSide(
-                  color: MercDealTheme.green.withValues(alpha: 0.45),
+          GlowButton(
+            label: 'Accedi / Registrati',
+            icon: Icons.login_rounded,
+            secondary: true,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const AuthScreen(),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),
