@@ -1,30 +1,31 @@
-# MercDeal V3 — Final Source Package
+# MercDeal V3 — Complete final source package
 
-MercDeal is a dark/glossy marketplace centered on Asta al ribasso.
+MercDeal is a dark/glossy marketplace experience centered on the downward-price auction.
 
-## Included product flows
-- Dynamic discovery Home
-- Search, categories, filters and saved searches UI
-- Compralo subito / Asta al ribasso / Proposta libera
-- €0.20/day downward auction rule, 7/15/30 days, hidden seller minimum
-- Favorites and target-price monitoring UI
-- Seller verification UI
-- Deal+ €4.99/month / €39.99/year
-- Vetrina Premium, 7 days, one listing at a time
-- Checkout with shipping cost shown before purchase/offer
-- Shipping/tracking UI
-- Hand pickup appointment UI and temporary location consent
-- Orders and delivery confirmation UI
-- Reviews
-- Chat and notifications UI
-- MercDeal Authenticity UI
-- Packing video / Security Seal UI
-- MercDeal Report / safety UI
-- Supabase schema/RLS/server-authoritative auction foundations
+## Included UX/product flows
+- Premium dark/glossy neon green + blue visual system
+- Branded splash and navigation: Home, Cerca, Vendi, Messaggi, Profilo
+- Dynamic discovery Home: Scopri ora, Sta scendendo ora, Quasi al tuo prezzo, Vetrina Deal+
+- Downward auction: €0.20/day, seller minimum hidden, 7/15/30 days
+- Buy now and free offer flows
+- Listing detail with follow/target-price concepts
+- Shipping cost shown before purchase/offer; CAP, weight and dimensions UI
+- Checkout, protected-payment messaging, shipping/tracking flow
+- Hand pickup flow, seller-selected meeting point, temporary location consent, arrival state and 10-minute final window
+- Seller verification and private verification-data concept
+- Deal+ €4.99/month or €39.99/year; Vetrina for 7 days, one listing at a time
+- MercDeal Authenticity states and evidence concepts
+- Packing video (max 1 minute) and printable Security Seal concept
+- Orders, confirmation/problem path and reviews
+- Messages/chat restrictions concept
+- Notifications and saved-price monitoring concepts
+- MercDeal Report / safety flow
+- How MercDeal works: buyer/seller timelines
+- Supabase schema/security foundations
 - Codemagic Android debug/release and iOS workflows
 
 ## Production integrations
-Payments, KYC/KYB, shipping carrier accounts, maps, push notifications and webhooks remain configuration/integration steps requiring real provider accounts and secrets. No fake live payment or shipping transaction is represented as real.
+Real payments, KYC/KYB, carrier pricing/labels, maps, push notifications and webhooks require production provider accounts, credentials, legal/compliance configuration and server-side implementation. The UI does not pretend those external services are live.
 
 ## Verification
-Flutter SDK is not available in this environment, so local Flutter analyze/test/build cannot be claimed as passed. Codemagic remains the authoritative CI verification step.
+The package has been structurally checked in this environment. Flutter SDK is not installed here, so Flutter analyze/test/build are not claimed as passed; Codemagic is the CI verification step.

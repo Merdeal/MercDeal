@@ -81,3 +81,9 @@ Prima della pubblicazione:
 
 ## V3 final source package
 This package contains the consolidated V3 UI, product flows, Supabase foundations, asset directories and Codemagic configuration. External production providers require their own credentials and webhook configuration.
+
+## MercDeal V3 final
+This package is the consolidated V3 source project. Android Debug is configured to run widget tests and build the APK; release/iOS keep static analysis with non-fatal infos/warnings. External production services require their own credentials and webhook configuration.
+
+## MercDeal V3 complete package
+This is the consolidated V3 source package. It includes the redesigned marketplace UI and the agreed buyer, seller, auction, shipping, pickup, safety, Deal+ and reputation flows. External providers require real production configuration.
