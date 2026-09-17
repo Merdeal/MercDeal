@@ -17,49 +17,62 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract MercDeal V3
+      - name: Extract latest MercDeal package
         shell: bash
         run: |
           set -e
 
           ZIP=""
-          if [ -f "MercDeal_V3_FINAL.zip" ]; then
+
+          if [ -f "MercDeal_V3_COMPLETO_FINALE.zip" ]; then
+            ZIP="MercDeal_V3_COMPLETO_FINALE.zip"
+          elif [ -f "MercDeal_V3_FINAL_CORRECTED.zip" ]; then
+            ZIP="MercDeal_V3_FINAL_CORRECTED.zip"
+          elif [ -f "MercDeal_V3_FINAL.zip" ]; then
             ZIP="MercDeal_V3_FINAL.zip"
           elif [ -f "mercdeal_final.zip" ]; then
             ZIP="mercdeal_final.zip"
           else
-            echo "Nessun pacchetto MercDeal trovato."
+            echo "ERRORE: pacchetto MercDeal non trovato nella root del repository."
+            echo "Carica prima MercDeal_V3_COMPLETO_FINALE.zip nella root di GitHub."
             exit 1
           fi
 
+          echo "Pacchetto trovato: $ZIP"
+
           rm -rf /tmp/mercdeal
           mkdir -p /tmp/mercdeal
-
           unzip -q "$ZIP" -d /tmp/mercdeal
 
           PUBSPEC=$(find /tmp/mercdeal -type f -name "pubspec.yaml" -print -quit)
 
           if [ -z "$PUBSPEC" ]; then
-            echo "pubspec.yaml non trovato nel pacchetto."
+            echo "ERRORE: pubspec.yaml non trovato nel pacchetto."
             exit 1
           fi
 
           PROJECT_DIR=$(dirname "$PUBSPEC")
+
           cp -a "$PROJECT_DIR"/. .
 
-          rm -f MercDeal_V3_FINAL.zip mercdeal_final.zip
+          rm -f MercDeal_V3_COMPLETO_FINALE.zip
+          rm -f MercDeal_V3_FINAL_CORRECTED.zip
+          rm -f MercDeal_V3_FINAL.zip
+          rm -f mercdeal_final.zip
 
-      - name: Verify project
+      - name: Verify MercDeal project
         shell: bash
         run: |
           set -e
+
           test -f pubspec.yaml
           test -d lib
           test -d assets
           test -d supabase
           test -d test
           test -f codemagic.yaml
-          echo "MercDeal V3 project structure OK"
+
+          echo "MercDeal project extracted successfully."
 
       - name: Commit extracted project
         shell: bash
@@ -74,5 +87,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Prepare MercDeal V3 project"
+          git commit -m "Update MercDeal V3 complete project"
           git push
