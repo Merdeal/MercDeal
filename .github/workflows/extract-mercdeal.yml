@@ -10,82 +10,94 @@ permissions:
   contents: write
 
 jobs:
-  extract:
+  fix:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract latest MercDeal package
+      - name: Fix Dart syntax errors
         shell: bash
         run: |
           set -e
 
-          ZIP=""
+          python3 <<'PY'
+          from pathlib import Path
 
-          if [ -f "MercDeal_V3_COMPLETO_FINALE.zip" ]; then
-            ZIP="MercDeal_V3_COMPLETO_FINALE.zip"
-          elif [ -f "MercDeal_V3_FINAL_CORRECTED.zip" ]; then
-            ZIP="MercDeal_V3_FINAL_CORRECTED.zip"
-          elif [ -f "MercDeal_V3_FINAL.zip" ]; then
-            ZIP="MercDeal_V3_FINAL.zip"
-          elif [ -f "mercdeal_final.zip" ]; then
-            ZIP="mercdeal_final.zip"
-          else
-            echo "ERRORE: pacchetto MercDeal non trovato nella root del repository."
-            echo "Carica prima MercDeal_V3_COMPLETO_FINALE.zip nella root di GitHub."
-            exit 1
-          fi
+          # listing_detail_screen.dart
+          p = Path("lib/features/listing/listing_detail_screen.dart")
+          s = p.read_text(encoding="utf-8")
 
-          echo "Pacchetto trovato: $ZIP"
+          # Fix the extra ')' at the end of _auction().
+          s = s.replace("])])));", "])]));")
 
-          rm -rf /tmp/mercdeal
-          mkdir -p /tmp/mercdeal
-          unzip -q "$ZIP" -d /tmp/mercdeal
+          # Fix the missing ')' closing showModalBottomSheet() in _offer().
+          s = s.replace(
+              "Navigator.pop(c))]));}",
+              "Navigator.pop(c))])));}"
+          )
 
-          PUBSPEC=$(find /tmp/mercdeal -type f -name "pubspec.yaml" -print -quit)
+          p.write_text(s, encoding="utf-8")
 
-          if [ -z "$PUBSPEC" ]; then
-            echo "ERRORE: pubspec.yaml non trovato nel pacchetto."
-            exit 1
-          fi
+          # checkout_screen.dart
+          p = Path("lib/features/checkout/checkout_screen.dart")
+          s = p.read_text(encoding="utf-8")
 
-          PROJECT_DIR=$(dirname "$PUBSPEC")
+          # Fix the missing ')' closing _choice().
+          s = s.replace(
+              "Colors.white24)]));",
+              "Colors.white24)])));"
+          )
 
-          cp -a "$PROJECT_DIR"/. .
+          # Fix the extra ')' at the end of build().
+          s = s.replace(
+              "const MeetupScreen()))) ])));}",
+              "const MeetupScreen()))) ]));}"
+          )
 
-          rm -f MercDeal_V3_COMPLETO_FINALE.zip
-          rm -f MercDeal_V3_FINAL_CORRECTED.zip
-          rm -f MercDeal_V3_FINAL.zip
-          rm -f mercdeal_final.zip
+          p.write_text(s, encoding="utf-8")
 
-      - name: Verify MercDeal project
+          print("Dart syntax fixes applied.")
+
+          # Basic delimiter sanity check on the two modified files.
+          for name in [
+              "lib/features/listing/listing_detail_screen.dart",
+              "lib/features/checkout/checkout_screen.dart",
+          ]:
+              text = Path(name).read_text(encoding="utf-8")
+              print(
+                  name,
+                  "():", text.count("(") - text.count(")"),
+                  "{}:", text.count("{") - text.count("}"),
+                  "[]:", text.count("[") - text.count("]"),
+              )
+          PY
+
+      - name: Verify required files
         shell: bash
         run: |
           set -e
-
           test -f pubspec.yaml
-          test -d lib
-          test -d assets
-          test -d supabase
-          test -d test
-          test -f codemagic.yaml
+          test -f lib/features/listing/listing_detail_screen.dart
+          test -f lib/features/checkout/checkout_screen.dart
+          test -f test/widget_test.dart
+          echo "MercDeal files OK"
 
-          echo "MercDeal project extracted successfully."
-
-      - name: Commit extracted project
+      - name: Commit fixes
         shell: bash
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add -A
+          git add lib/features/listing/listing_detail_screen.dart \
+                  lib/features/checkout/checkout_screen.dart
 
           if git diff --cached --quiet; then
-            echo "Nessuna modifica da salvare."
+            echo "Nessuna modifica: i fix sono già presenti."
             exit 0
           fi
 
-          git commit -m "Update MercDeal V3 complete project"
+          git commit -m "Fix MercDeal Dart syntax"
           git push
