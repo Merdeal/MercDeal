@@ -38,11 +38,16 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   );
                 },
-                icon: const Icon(Icons.notifications_none_rounded),
+                icon: const Icon(
+                  Icons.notifications_none_rounded,
+                ),
               ),
             ],
           ),
+
           const SizedBox(height: 10),
+
+          // PROFILO
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
@@ -54,7 +59,9 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               border: Border.all(
-                color: MercDealTheme.green.withValues(alpha: 0.2),
+                color: MercDealTheme.green.withValues(
+                  alpha: 0.2,
+                ),
               ),
             ),
             child: Row(
@@ -68,10 +75,13 @@ class ProfileScreen extends StatelessWidget {
                     color: Colors.white70,
                   ),
                 ),
+
                 const SizedBox(width: 14),
+
                 const Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Il tuo profilo',
@@ -80,7 +90,9 @@ class ProfileScreen extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
+
                       SizedBox(height: 4),
+
                       Text(
                         '🟢 ✓ Venditore verificato',
                         style: TextStyle(
@@ -89,9 +101,12 @@ class ProfileScreen extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
+
                       SizedBox(height: 4),
+
                       Text(
-                        'Reputazione costruita sulle transazioni concluse',
+                        'Reputazione costruita sulle '
+                        'transazioni concluse',
                         style: TextStyle(
                           color: Colors.white54,
                           fontSize: 11,
@@ -103,17 +118,42 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(height: 14),
+
+          // STATISTICHE
           Row(
             children: [
-              Expanded(child: _stat('—', 'Rating')),
+              Expanded(
+                child: _stat(
+                  '—',
+                  'Rating',
+                ),
+              ),
+
               const SizedBox(width: 8),
-              Expanded(child: _stat('—', 'Affari')),
+
+              Expanded(
+                child: _stat(
+                  '—',
+                  'Affari',
+                ),
+              ),
+
               const SizedBox(width: 8),
-              Expanded(child: _stat('—', 'Puntuale')),
+
+              Expanded(
+                child: _stat(
+                  '—',
+                  'Puntuale',
+                ),
+              ),
             ],
           ),
+
           const SizedBox(height: 18),
+
+          // ORDINI
           _tile(
             context,
             Icons.shopping_bag_outlined,
@@ -121,6 +161,8 @@ class ProfileScreen extends StatelessWidget {
             'Acquisti, spedizioni e ritiri',
             const OrdersScreen(),
           ),
+
+          // RECENSIONI
           _tile(
             context,
             Icons.star_outline_rounded,
@@ -128,6 +170,8 @@ class ProfileScreen extends StatelessWidget {
             'Feedback e reputazione',
             const ReviewsScreen(),
           ),
+
+          // DEAL+
           _tile(
             context,
             Icons.diamond_outlined,
@@ -135,6 +179,8 @@ class ProfileScreen extends StatelessWidget {
             'Alert avanzati e Vetrina',
             const DealPlusScreen(),
           ),
+
+          // COME FUNZIONA
           _tile(
             context,
             Icons.menu_book_outlined,
@@ -142,6 +188,8 @@ class ProfileScreen extends StatelessWidget {
             'Venditore, acquirente e sicurezza',
             const HowItWorksScreen(),
           ),
+
+          // SICUREZZA
           _tile(
             context,
             Icons.security_outlined,
@@ -149,28 +197,57 @@ class ProfileScreen extends StatelessWidget {
             'Verifica, autenticità e MercDeal Report',
             const SecurityScreen(),
           ),
+
           const SizedBox(height: 10),
-          GlowButton(
-            label: 'Accedi / Registrati',
-            icon: Icons.login_rounded,
-            secondary: true,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AuthScreen(),
+
+          // ACCESSO / REGISTRAZIONE
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AuthScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.login_rounded,
+              ),
+              label: const Text(
+                'Accedi / Registrati',
+              ),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: MercDealTheme.green,
+                side: BorderSide(
+                  color: MercDealTheme.green.withValues(
+                    alpha: 0.45,
+                  ),
                 ),
-              );
-            },
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _stat(String value, String label) {
+  // STATISTICA
+  Widget _stat(
+    String value,
+    String label,
+  ) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(
+        vertical: 14,
+      ),
       decoration: BoxDecoration(
         color: MercDealTheme.card,
         borderRadius: BorderRadius.circular(18),
@@ -184,6 +261,7 @@ class ProfileScreen extends StatelessWidget {
               fontWeight: FontWeight.w900,
             ),
           ),
+
           Text(
             label,
             style: const TextStyle(
@@ -196,6 +274,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  // VOCE MENU
   Widget _tile(
     BuildContext context,
     IconData icon,
@@ -209,12 +288,16 @@ class ProfileScreen extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => page),
+            MaterialPageRoute(
+              builder: (_) => page,
+            ),
           );
         },
         borderRadius: BorderRadius.circular(18),
         child: Container(
-          margin: const EdgeInsets.only(bottom: 9),
+          margin: const EdgeInsets.only(
+            bottom: 9,
+          ),
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: MercDealTheme.card,
@@ -226,7 +309,9 @@ class ProfileScreen extends StatelessWidget {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: MercDealTheme.green.withValues(alpha: 0.08),
+                  color: MercDealTheme.green.withValues(
+                    alpha: 0.08,
+                  ),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Icon(
@@ -234,10 +319,13 @@ class ProfileScreen extends StatelessWidget {
                   color: MercDealTheme.green,
                 ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
@@ -245,6 +333,7 @@ class ProfileScreen extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                       ),
                     ),
+
                     Text(
                       subtitle,
                       style: const TextStyle(
@@ -255,6 +344,7 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
+
               const Icon(
                 Icons.chevron_right_rounded,
                 color: Colors.white30,
