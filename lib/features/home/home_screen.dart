@@ -72,19 +72,19 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 20),
             _SectionTitle(title: '⚡ Sta scendendo ora', action: 'Vedi tutti'),
             const SizedBox(height: 9),
-            _DealRow(context, rotated.take(4).toList()),
+            _dealRow(context, rotated.take(4).toList()),
             const SizedBox(height: 20),
             _AuctionFeature(product: products[3], progress: _ambient.value, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ListingDetailScreen(listing: products[3])))),
             const SizedBox(height: 20),
             _SectionTitle(title: '🔥 Affari in discesa', action: 'Vedi tutti'),
             const SizedBox(height: 9),
-            _DealRow(context, rotated.reversed.take(4).toList()),
+            _dealRow(context, rotated.reversed.take(4).toList()),
             const SizedBox(height: 20),
             _DiscoverCard(onTap: _rotateFeed, index: _feedIndex),
             const SizedBox(height: 20),
             _SectionTitle(title: '💎 Vetrina Deal+', action: 'Vedi tutti', onAction: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DealPlusScreen()))),
             const SizedBox(height: 9),
-            _DealRow(context, products.where((x) => x.showcase).toList()),
+            _dealRow(context, products.where((x) => x.showcase).toList()),
             const SizedBox(height: 20),
             _SafetyStrip(),
             const SizedBox(height: 20),
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _DealRow(BuildContext context, List<Listing> list) => SizedBox(
+  Widget _dealRow(BuildContext context, List<Listing> list) => SizedBox(
         height: 274,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,

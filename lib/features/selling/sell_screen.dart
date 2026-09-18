@@ -11,6 +11,7 @@ class SellScreen extends StatefulWidget {
 }
 class _SellScreenState extends State<SellScreen> {
   int step=0, mode=1; bool ship=true, pickup=true; double start=80, minimum=65, drop=.20;
+  int durationDays = 15;
   final title=TextEditingController();
   @override void dispose(){title.dispose();super.dispose();}
   @override Widget build(BuildContext context){
@@ -27,7 +28,158 @@ class _SellScreenState extends State<SellScreen> {
   ]);
   Widget _stepMode()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[GlassCard(glow:true,child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('2. COME VUOI VENDERLO?',style:TextStyle(fontSize:20,fontWeight:FontWeight.w900)),const SizedBox(height:12),_mode(0,Icons.shopping_cart_rounded,'Compralo subito','Prezzo fisso. L’acquirente può comprare subito.'),_mode(1,Icons.trending_down_rounded,'Asta al ribasso','Il prezzo scende ogni giorno fino al minimo che decidi.'),_mode(2,Icons.handshake_rounded,'Proposta libera','Ricevi offerte e scegli se accettarle, rifiutarle o controproporre.'),const SizedBox(height:8),const Text('📈 Asta al ribasso = maggiore visibilità gratuita nell’ecosistema MercDeal.',style:TextStyle(color:MercDealTheme.green,fontWeight:FontWeight.w800,fontSize:12))])),const SizedBox(height:14),Row(children:[Expanded(child:OutlinedButton(onPressed:()=>setState(()=>step=0),child:const Text('Indietro'))),const SizedBox(width:8),Expanded(child:GlowButton(label:'Avanti',icon:Icons.arrow_forward_rounded,onPressed:()=>setState(()=>step=2)))])]);
   Widget _mode(int value,IconData icon,String title,String sub)=>GestureDetector(onTap:()=>setState(()=>mode=value),child:Container(margin:const EdgeInsets.only(bottom:8),padding:const EdgeInsets.all(14),decoration:BoxDecoration(color:mode==value?MercDealTheme.green.withValues(alpha:.09):Colors.transparent,borderRadius:BorderRadius.circular(18),border:Border.all(color:mode==value?MercDealTheme.green.withValues(alpha:.55):Colors.white10)),child:Row(children:[Icon(icon,color:mode==value?MercDealTheme.green:Colors.white60,size:28),const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(title,style:const TextStyle(fontWeight:FontWeight.w900,fontSize:16)),Text(sub,style:const TextStyle(color:Colors.white54,fontSize:11))])),Icon(mode==value?Icons.radio_button_checked:Icons.radio_button_off,color:mode==value?MercDealTheme.green:Colors.white30)])));
-  Widget _stepPrice()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[GlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('3. PREZZO E CONSEGNA',style:TextStyle(fontSize:20,fontWeight:FontWeight.w900)),if(mode==1)...[const SizedBox(height:12),Row(children:[Expanded(child:_num('Prezzo iniziale',start)),const SizedBox(width:8),Expanded(child:_num('Prezzo minimo',minimum))]),const SizedBox(height:10),_num('Decremento giornaliero',drop),const SizedBox(height:10),const Text('Durata annuncio',style:TextStyle(fontWeight:FontWeight.w900)),const SizedBox(height:5),const Wrap(spacing:8,children:[ChoiceChip(label:Text('7 giorni'),selected:false,onSelected:null),ChoiceChip(label:Text('15 giorni'),selected:true,onSelected:null),ChoiceChip(label:Text('30 giorni'),selected:false,onSelected:null)]),const SizedBox(height:10),Container(height:100,padding:const EdgeInsets.all(12),decoration:BoxDecoration(color:Colors.black26,borderRadius:BorderRadius.circular(18)),child:Row(children:[Text('€${start.toStringAsFixed(2)}'),const Expanded(child:Divider(indent:12,endIndent:12,color:MercDealTheme.green)),Text('€${minimum.toStringAsFixed(2)}',style:const TextStyle(color:MercDealTheme.green,fontWeight:FontWeight.w900))])),],const SizedBox(height:12),const Text('Opzioni di consegna',style:TextStyle(fontWeight:FontWeight.w900)),SwitchListTile(contentPadding:EdgeInsets.zero,value:ship,onChanged:(v)=>setState(()=>ship=v),title:const Text('Spedizione'),subtitle:const Text('Corriere + tracking'),secondary:const Icon(Icons.local_shipping_outlined,color:MercDealTheme.green)),SwitchListTile(contentPadding:EdgeInsets.zero,value:pickup,onChanged:(v)=>setState(()=>pickup=v),title:const Text('Ritiro a mano'),subtitle:const Text('Punto scelto dal venditore'),secondary:const Icon(Icons.location_on_outlined,color:MercDealTheme.green))])),const SizedBox(height:14),GlowButton(label:'🚀 Pubblica annuncio',icon:Icons.rocket_launch_rounded,onPressed:()=>_publish(context)),const SizedBox(height:8),OutlinedButton.icon(onPressed:()=>setState(()=>step=1),icon:const Icon(Icons.arrow_back_rounded),label:const Text('Indietro'),style:OutlinedButton.styleFrom(minimumSize:const Size.fromHeight(48))) ]);
-  Widget _num(String label,double value)=>TextField(keyboardType:TextInputType.number,decoration:InputDecoration(labelText:label,prefixText:'€ ',hintText:value.toStringAsFixed(2)));
+  Widget _stepPrice() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      GlassCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '3. PREZZO E CONSEGNA',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 12),
+
+            if (mode == 1) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: _num(
+                      'Prezzo iniziale',
+                      start,
+                      (v) => setState(() => start = v),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _num(
+                      'Prezzo minimo',
+                      minimum,
+                      (v) => setState(() => minimum = v),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Riduzione giornaliera calcolata automaticamente',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 5),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Text(
+                  start > minimum && durationDays > 0
+                      ? '€${((start - minimum) / durationDays).toStringAsFixed(2)} al giorno'
+                      : 'Inserisci un prezzo iniziale e un prezzo minimo validi',
+                  style: TextStyle(
+                    color: MercDealTheme.green,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Durata annuncio',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 5),
+              Wrap(
+                spacing: 8,
+                children: [
+                  ChoiceChip(
+                    label: const Text('7 giorni'),
+                    selected: durationDays == 7,
+                    onSelected: (_) => setState(() => durationDays = 7),
+                  ),
+                  ChoiceChip(
+                    label: const Text('15 giorni'),
+                    selected: durationDays == 15,
+                    onSelected: (_) => setState(() => durationDays = 15),
+                  ),
+                  ChoiceChip(
+                    label: const Text('30 giorni'),
+                    selected: durationDays == 30,
+                    onSelected: (_) => setState(() => durationDays = 30),
+                  ),
+                ],
+              ),
+            ] else ...[
+              _num(
+                mode == 0 ? 'Prezzo di vendita' : 'Prezzo di riferimento',
+                start,
+                (v) => setState(() => start = v),
+              ),
+            ],
+
+            const SizedBox(height: 14),
+            const Text(
+              'Opzioni di consegna',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+            ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: ship,
+              onChanged: (v) => setState(() => ship = v),
+              title: const Text('Spedizione'),
+              subtitle: const Text('Corriere + tracking'),
+              secondary: Icon(
+                Icons.local_shipping_outlined,
+                color: MercDealTheme.green,
+              ),
+            ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: pickup,
+              onChanged: (v) => setState(() => pickup = v),
+              title: const Text('Ritiro a mano'),
+              subtitle: const Text('Punto scelto dal venditore'),
+              secondary: Icon(
+                Icons.location_on_outlined,
+                color: MercDealTheme.green,
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 14),
+      SizedBox(
+        width: double.infinity,
+        child: GlowButton(
+          label: '🚀 Pubblica annuncio',
+          icon: Icons.rocket_launch_rounded,
+          onPressed: () => _publish(context),
+        ),
+      ),
+      const SizedBox(height: 8),
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () => setState(() => step = 1),
+          icon: const Icon(Icons.arrow_back_rounded),
+          label: const Text('Indietro'),
+        ),
+      ),
+    ],
+  );
+  Widget _num(String label, double value, ValueChanged<double> onChanged) =>
+      TextField(
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: (text) {
+          final parsed = double.tryParse(text.replaceAll(',', '.'));
+          if (parsed != null) onChanged(parsed);
+        },
+        decoration: InputDecoration(
+          labelText: label,
+          prefixText: '€ ',
+          hintText: value.toStringAsFixed(2),
+        ),
+      );
   void _publish(BuildContext context){final listing=Listing(id:'new',title:title.text.isEmpty?'Il mio nuovo annuncio':title.text,category:'Elettronica',priceLabel:'€${minimum.toStringAsFixed(2).replaceAll('.',',')}',oldPriceLabel:'€${start.toStringAsFixed(2).replaceAll('.',',')}',dropLabel:'Asta',asset:'phone.png',location:'Italia',price:minimum,startPrice:start,minimumPrice:minimum,drop:drop,mode:mode==0?SaleMode.buyNow:mode==2?SaleMode.freeOffer:SaleMode.descendingAuction,condition:ListingCondition.likeNew,verifiedSeller:true,showcase:false,followers:0,offers:0);Navigator.push(context,MaterialPageRoute(builder:(_)=>ListingDetailScreen(listing:listing)));}
 }
