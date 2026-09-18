@@ -9,3 +9,8 @@ build/
 .vscode/
 *.iml
 .DS_Store
+
+# MercDeal signing key - NEVER commit this file
+mercdeal.keystore
+*.keystore
+*.jks
