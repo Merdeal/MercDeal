@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 enum SaleMode{descendingAuction,buyNow,freeOffer}
 enum ListingCondition{newItem,likeNew,excellent,good,acceptable}
 class Listing{final String id,title,category,priceLabel,oldPriceLabel,dropLabel,asset,location;final double price,startPrice,minimumPrice,drop;final SaleMode mode;final ListingCondition condition;final bool verifiedSeller,showcase;final int followers,offers;const Listing({required this.id,required this.title,required this.category,required this.priceLabel,required this.oldPriceLabel,required this.dropLabel,required this.asset,required this.location,required this.price,required this.startPrice,required this.minimumPrice,required this.drop,required this.mode,required this.condition,required this.verifiedSeller,required this.showcase,required this.followers,required this.offers});}
