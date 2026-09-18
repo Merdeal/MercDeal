@@ -27,16 +27,16 @@ android {
 
     signingConfigs {
         release {
-            def keystorePath = System.getenv("CM_KEYSTORE_PATH")
-            def keystorePassword = System.getenv("CM_KEYSTORE_PASSWORD")
-            def keyAlias = System.getenv("CM_KEY_ALIAS")
-            def keyPassword = System.getenv("CM_KEY_PASSWORD")
+            def cmKeystorePath = System.getenv("CM_KEYSTORE_PATH")
+            def cmKeystorePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+            def cmKeyAlias = System.getenv("CM_KEY_ALIAS")
+            def cmKeyPassword = System.getenv("CM_KEY_PASSWORD")
 
-            if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
-                storeFile = file(keystorePath)
-                storePassword = keystorePassword
-                keyAlias = keyAlias
-                keyPassword = keyPassword
+            if (cmKeystorePath && cmKeystorePassword && cmKeyAlias && cmKeyPassword) {
+                storeFile = file(cmKeystorePath)
+                storePassword = cmKeystorePassword
+                keyAlias = cmKeyAlias
+                keyPassword = cmKeyPassword
             }
         }
     }
