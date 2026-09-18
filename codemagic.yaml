@@ -1,35 +1,31 @@
 workflows:
   android-debug:
     name: MercDeal Android Debug
-    max_build_duration: 60
+    max_build_duration: 30
     environment:
       flutter: stable
+      android_signing:
+        - mercdeal_keystore
     scripts:
       - name: Get packages
         script: flutter pub get
-      - name: Widget tests
+      - name: Flutter tests
         script: flutter test
-      - name: Generate Android platform
-        script: flutter create --platforms=android --org it.mercdeal .
-      - name: Build APK
+      - name: Build debug APK
         script: flutter build apk --debug
     artifacts:
       - build/app/outputs/flutter-apk/app-debug.apk
 
   android-release:
     name: MercDeal Android Release
-    max_build_duration: 60
+    max_build_duration: 30
     environment:
       flutter: stable
     scripts:
       - name: Get packages
         script: flutter pub get
-      - name: Static analysis
-        script: flutter analyze --no-fatal-infos --no-fatal-warnings
-      - name: Widget tests
-        script: flutter test
-      - name: Generate Android platform
-        script: flutter create --platforms=android --org it.mercdeal .
+      - name: Analyze
+        script: flutter analyze
       - name: Build release APK
         script: flutter build apk --release
     artifacts:
@@ -37,19 +33,14 @@ workflows:
 
   ios-build:
     name: MercDeal iOS Build
-    max_build_duration: 60
+    max_build_duration: 30
     environment:
       flutter: stable
+      xcode: latest
     scripts:
       - name: Get packages
         script: flutter pub get
-      - name: Static analysis
-        script: flutter analyze --no-fatal-infos --no-fatal-warnings
-      - name: Widget tests
-        script: flutter test
-      - name: Generate iOS platform files
-        script: flutter create --platforms=ios --org it.mercdeal .
-      - name: Build iOS without signing
+      - name: Analyze
+        script: flutter analyze
+      - name: Build iOS
         script: flutter build ios --no-codesign
-    artifacts:
-      - build/ios/iphoneos/Runner.app

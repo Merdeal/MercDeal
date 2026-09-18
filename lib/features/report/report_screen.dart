@@ -2,48 +2,16 @@ import 'package:flutter/material.dart';
 import '../../app/theme.dart';
 import '../../core/widgets/merc_widgets.dart';
 
-class ReportScreen extends StatefulWidget {
-  const ReportScreen({super.key});
-  @override State<ReportScreen> createState() => _ReportScreenState();
-}
-
-class _ReportScreenState extends State<ReportScreen> {
-  final details = TextEditingController();
-  bool reviewed = false;
-  @override void dispose() { details.dispose(); super.dispose(); }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('MercDeal Report', style: TextStyle(fontWeight: FontWeight.w900))),
-      body: ListView(padding: const EdgeInsets.all(18), children: [
-        const Text('Segnala un problema', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
-        const SizedBox(height: 7),
-        const Text('MercDeal raccoglie gli elementi utili per preparare un dossier della transazione. Il dossier non equivale automaticamente a una denuncia.', style: TextStyle(color: Colors.white54, height: 1.35)),
-        const SizedBox(height: 18),
-        Container(padding: const EdgeInsets.all(15), decoration: BoxDecoration(color: MercDealTheme.card, borderRadius: BorderRadius.circular(19)), child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Elementi raccolti', style: TextStyle(fontWeight: FontWeight.w900)),
-          SizedBox(height: 8),
-          Text('• ordine e annuncio\n• chat rilevante\n• pagamento e stato\n• tracking e spedizione\n• video imballaggio / apertura\n• Security Seal\n• allegati forniti dalle parti', style: TextStyle(color: Colors.white60, height: 1.55)),
-        ])),
-        const SizedBox(height: 14),
-        TextField(controller: details, maxLines: 5, decoration: const InputDecoration(labelText: 'Descrivi il problema', hintText: 'Cosa è successo?')),
-        const SizedBox(height: 10),
-        CheckboxListTile(contentPadding: EdgeInsets.zero, value: reviewed, onChanged: (v) => setState(() => reviewed = v ?? false), title: const Text('Ho controllato il riepilogo dei dati da inviare.'), activeColor: MercDealTheme.green),
-        const SizedBox(height: 8),
-        GlowButton(label: 'Prepara dossier', icon: Icons.folder_zip_outlined, onPressed: reviewed ? () => _showReady(context) : null),
-      ]),
-    );
-  }
-
-  void _showReady(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Dossier pronto'),
-        content: const Text('Questa build prepara il flusso. L’invio a servizi esterni sarà collegato nel backend di produzione.'),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Chiudi'))],
-      ),
-    );
-  }
+class ReportScreen extends StatefulWidget { const ReportScreen({super.key}); @override State<ReportScreen> createState()=>_ReportScreenState(); }
+class _ReportScreenState extends State<ReportScreen>{ bool fraud=false;
+ @override Widget build(BuildContext context){
+  final evidence=['Ordine e importo','Annuncio e utenti coinvolti','Date e orari','Chat rilevante','Pagamento','Tracking e spedizione','Video imballaggio / apertura','Peso del pacco','Security Seal','Altre prove e allegati'];
+  return Scaffold(appBar:AppBar(title:const Text('MercDeal Report',style:TextStyle(fontWeight:FontWeight.w900))),body:ListView(padding:const EdgeInsets.all(16),children:[
+   const Text('🚨 Segnala un problema',style:TextStyle(fontSize:26,fontWeight:FontWeight.w900)),const SizedBox(height:6),const Text('In caso di possibile truffa, MercDeal può raccogliere le evidenze pertinenti all’ordine.',style:TextStyle(color:Colors.white54)),
+   SwitchListTile(contentPadding:EdgeInsets.zero,value:fraud,onChanged:(v)=>setState(()=>fraud=v),title:const Text('Possibile truffa',style:TextStyle(fontWeight:FontWeight.w900))),
+   ...evidence.map((x)=>const ListTile(leading:Icon(Icons.check_circle_outline,color:MercDealTheme.green),title:Text(''))).toList().asMap().entries.map((e)=>ListTile(leading:const Icon(Icons.check_circle_outline,color:MercDealTheme.green),title:Text(evidence[e.key]))),
+   const SizedBox(height:8),const GlassCard(child:Text('Il report è un riepilogo di evidenze. L’utente deve controllarlo e decidere se procedere verso la procedura ufficiale di denuncia.',style:TextStyle(color:Colors.white60,fontSize:11,height:1.4))),const SizedBox(height:12),
+   GlowButton(label:'Prepara riepilogo',icon:Icons.description_outlined,onPressed:()=>showDialog(context:context,builder:(_)=>AlertDialog(title:const Text('Riepilogo pronto'),content:const Text('Demo: qui il riepilogo verrebbe mostrato per il controllo finale prima di qualsiasi procedura ufficiale.'),actions:[TextButton(onPressed:()=>Navigator.pop(context),child:const Text('Chiudi'))])))
+  ]));
+ }
 }

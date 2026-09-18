@@ -1,8 +1,65 @@
 import 'package:flutter/material.dart';
 import '../../app/theme.dart';
+import '../../core/widgets/merc_widgets.dart';
 
-class MessagesScreen extends StatelessWidget { const MessagesScreen({super.key});
-  @override Widget build(BuildContext c)=>SafeArea(child:ListView(padding:const EdgeInsets.fromLTRB(18,18,18,30),children:[const Text('Messaggi',style:TextStyle(fontSize:28,fontWeight:FontWeight.w900)),const Text('Chat, offerte e trattative in un unico posto.',style:TextStyle(color:Colors.white54)),const SizedBox(height:18),TextField(decoration:const InputDecoration(hintText:'Cerca nelle conversazioni',prefixIcon:Icon(Icons.search_rounded))),const SizedBox(height:14),_chat(c,'Marco','Sony Alpha 7 III','Posso scendere a €1.120?','2 min',true,Icons.camera_alt_rounded),_chat(c,'Giulia','Air Jordan Retro','Perfetto, ritiro a mano 👍','18 min',false,Icons.shopping_bag_rounded),_chat(c,'Luca','PlayStation 5 Slim','Ho appena fatto una proposta.','1 h',true,Icons.sports_esports_rounded)]));
-  Widget _chat(BuildContext c,String name,String item,String msg,String time,bool unread,IconData icon)=>Material(color:Colors.transparent,child:InkWell(onTap:()=>showModalBottomSheet(context:c,backgroundColor:MercDealTheme.card,builder:(_)=>const _Conversation()),child:Container(padding:const EdgeInsets.symmetric(vertical:13),decoration:const BoxDecoration(border:Border(bottom:BorderSide(color:Color(0x0FFFFFFF)))),child:Row(children:[Container(width:52,height:52,decoration:BoxDecoration(color:MercDealTheme.card2,borderRadius:BorderRadius.circular(16)),child:Icon(icon,color:MercDealTheme.green)),const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(children:[Text(name,style:const TextStyle(fontWeight:FontWeight.w900)),const Spacer(),Text(time,style:const TextStyle(color:Colors.white30,fontSize:10))]),Text(item,style:const TextStyle(color:MercDealTheme.blue,fontSize:11,fontWeight:FontWeight.w700)),Text(msg,maxLines:1,overflow:TextOverflow.ellipsis,style:TextStyle(color:unread?Colors.white70:Colors.white38,fontSize:12))])),if(unread)Container(width:8,height:8,decoration:const BoxDecoration(color:MercDealTheme.green,shape:BoxShape.circle))]))));
+class MessagesScreen extends StatelessWidget {
+  const MessagesScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 30),
+        children: [
+          const Text('Messaggi', style: TextStyle(fontSize: 29, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 4),
+          const Text('Chat, offerte e trattative.', style: TextStyle(color: Colors.white54)),
+          const SizedBox(height: 16),
+          _chat(context, 'LucaR', 'iPhone 14 Pro 128GB', 'Ci vediamo oggi alle 18:00?', '2 min', true),
+          _chat(context, 'SaraM', 'PS5', 'Posso fare €300?', '18 min', false),
+          _chat(context, 'MarcoP', 'Action Cam 12', 'Controproposta ricevuta', '1 h', true),
+          const SizedBox(height: 14),
+          const GlassCard(child: Row(children: [
+            Icon(Icons.lock_outline, color: MercDealTheme.green),
+            SizedBox(width: 10),
+            Expanded(child: Text('Prima dell’acquisto: messaggi, foto, offerte e controfferte. Gli appuntamenti si attivano solo dopo acquisto + ritiro a mano.', style: TextStyle(color: Colors.white60, fontSize: 11))),
+          ])),
+        ],
+      ),
+    );
+  }
+  Widget _chat(BuildContext context, String name, String item, String message, String time, bool online) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: GlassCard(
+        onTap: () => _open(context, name, item),
+        child: Row(children: [
+          const CircleAvatar(backgroundColor: MercDealTheme.card2, child: Icon(Icons.person_rounded)),
+          const SizedBox(width: 12),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [Text(name, style: const TextStyle(fontWeight: FontWeight.w900)), if (online) const Padding(padding: EdgeInsets.only(left: 5), child: Icon(Icons.circle, color: MercDealTheme.green, size: 8))]),
+            Text(item, style: const TextStyle(color: MercDealTheme.green, fontSize: 10)),
+            Text(message, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white60, fontSize: 11)),
+          ])),
+          Text(time, style: const TextStyle(color: Colors.white38, fontSize: 9)),
+        ]),
+      ),
+    );
+  }
+  void _open(BuildContext context, String name, String item) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: MercDealTheme.card,
+      builder: (sheet) => Padding(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 18, bottom: MediaQuery.of(sheet).viewInsets.bottom + 18),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(children: [const CircleAvatar(child: Icon(Icons.person_rounded)), const SizedBox(width: 9), Expanded(child: Text(name, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900))), const Icon(Icons.more_vert)]),
+          const SizedBox(height: 12),
+          GlassCard(child: Text('Ciao! Parliamo dell’annuncio $item. Dopo l’acquisto, se scegli Ritiro a mano, qui appariranno appuntamento e punto di incontro.', style: const TextStyle(color: Colors.white70, height: 1.4))),
+          const SizedBox(height: 10),
+          const TextField(decoration: InputDecoration(hintText: 'Scrivi un messaggio…', suffixIcon: Icon(Icons.send_rounded))),
+        ]),
+      ),
+    );
+  }
 }
-class _Conversation extends StatelessWidget { const _Conversation(); @override Widget build(BuildContext c)=>Padding(padding:const EdgeInsets.fromLTRB(18,18,18,30),child:Column(mainAxisSize:MainAxisSize.min,crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('Sony Alpha 7 III',style:TextStyle(fontSize:21,fontWeight:FontWeight.w900)),const SizedBox(height:12),const Text('Chat ordine / trattativa',style:TextStyle(color:Colors.white38)),const SizedBox(height:15),Container(padding:const EdgeInsets.all(13),decoration:BoxDecoration(color:MercDealTheme.card2,borderRadius:BorderRadius.circular(16)),child:const Text('Prima dell’acquisto puoi parlare dell’oggetto e delle offerte. Le funzioni di appuntamento si attivano solo dopo un acquisto con ritiro a mano.',style:TextStyle(color:Colors.white60,height:1.4))),const SizedBox(height:14),TextField(decoration:InputDecoration(hintText:'Scrivi un messaggio…',suffixIcon:IconButton(onPressed:null,icon:Icon(Icons.send_rounded,color:MercDealTheme.green))))])); }

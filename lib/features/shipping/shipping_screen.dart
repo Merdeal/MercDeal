@@ -1,12 +1,42 @@
 import 'package:flutter/material.dart';
 import '../../app/theme.dart';
 import '../../core/widgets/merc_widgets.dart';
-import '../security/security_screen.dart';
+import '../orders/orders_screen.dart';
+
 class ShippingScreen extends StatelessWidget {
   const ShippingScreen({super.key});
-  @override Widget build(BuildContext c)=>Scaffold(appBar:AppBar(title:const Text('Spedizione',style:TextStyle(fontWeight:FontWeight.w900))),body:ListView(padding:const EdgeInsets.all(18),children:[
-    _s('1','Pagamento protetto','Il pagamento resta nel flusso protetto secondo le regole dell’ordine.'),_s('2','Video imballaggio','Registra massimo 1 minuto: oggetto, condizioni, protezioni e chiusura.'),_s('3','Security Seal','Applica il sigillo stampabile MercDeal con codice e QR.'),_s('4','Etichetta','Scaricala dall’Area Venditore; può essere disponibile via email.'),_s('5','Tracking','Gli aggiornamenti arrivano automaticamente quando il provider è collegato.'),_s('6','Consegna e verifica','L’acquirente controlla l’oggetto e può confermare o segnalare.'),
-    Container(padding:const EdgeInsets.all(15),decoration:BoxDecoration(color:const Color(0xFF102B25),borderRadius:BorderRadius.circular(18)),child:const Row(children:[Icon(Icons.shield_outlined,color:MercDealTheme.green),SizedBox(width:10),Expanded(child:Text('Il costo di spedizione deve essere mostrato prima dell’acquisto o dell’offerta.',style:TextStyle(fontWeight:FontWeight.w700)))])),const SizedBox(height:14),GlowButton(label:'Sicurezza della transazione',icon:Icons.security_outlined,onPressed:()=>Navigator.push(c,MaterialPageRoute(builder:(_)=>const SecurityScreen())))
-  ]));
-  static Widget _s(String n,String t,String x)=>Container(margin:const EdgeInsets.only(bottom:9),padding:const EdgeInsets.all(14),decoration:BoxDecoration(color:MercDealTheme.card,borderRadius:BorderRadius.circular(18)),child:Row(crossAxisAlignment:CrossAxisAlignment.start,children:[Container(width:34,height:34,alignment:Alignment.center,decoration:const BoxDecoration(color:MercDealTheme.green,shape:BoxShape.circle),child:Text(n,style:const TextStyle(color:Color(0xFF04120B),fontWeight:FontWeight.w900))),const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(t,style:const TextStyle(fontWeight:FontWeight.w900)),const SizedBox(height:4),Text(x,style:const TextStyle(color:Colors.white54,height:1.35))]))]));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Spedizione', style: TextStyle(fontWeight: FontWeight.w900))),
+      body: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 30), children: [
+        const Text('Percorso spedizione', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
+        const SizedBox(height: 4),
+        const Text('Pagamento protetto → Proof → tracking → consegna → verifica.', style: TextStyle(color: Colors.white54)),
+        const SizedBox(height: 18),
+        _step('1','💳','Pagamento protetto','Il pagamento viene gestito nel flusso sicuro dell’ordine.'),
+        _step('2','📹','Video imballaggio','Massimo 1 minuto: prodotto, condizioni, imballaggio e chiusura.'),
+        _step('3','🚚','Etichetta e spedizione','L’etichetta viene resa disponibile nell’Area Venditore e inviata via email.'),
+        _step('4','📍','Tracking','Gli aggiornamenti della spedizione vengono collegati all’ordine.'),
+        _step('5','📦','Consegna e verifica','L’acquirente controlla l’oggetto e può confermare o segnalare un problema.'),
+        _step('6','🔓','Rilascio fondi','I fondi vengono rilasciati al venditore secondo le regole della transazione.'),
+        const SizedBox(height: 12),
+        const GlassCard(glow: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('🔐 Security Seal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+          SizedBox(height: 5),
+          Text('Soluzione stampabile da definire: codice univoco, QR e identificativo ordine. Un sigillo stampabile è un supporto di prova, non una garanzia assoluta.', style: TextStyle(color: Colors.white60, fontSize: 12, height: 1.4)),
+        ])),
+        const SizedBox(height: 14),
+        GlowButton(label: 'Vai ai miei ordini', icon: Icons.shopping_bag_outlined, onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrdersScreen()))),
+      ]),
+    );
+  }
+  Widget _step(String number, String icon, String title, String subtitle) => Padding(
+    padding: const EdgeInsets.only(bottom: 9),
+    child: GlassCard(glow: true, child: Row(children: [
+      CircleAvatar(backgroundColor: MercDealTheme.green, foregroundColor: Colors.black, child: Text(number, style: const TextStyle(fontWeight: FontWeight.w900))),
+      const SizedBox(width: 12), Text(icon, style: const TextStyle(fontSize: 23)), const SizedBox(width: 10),
+      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontWeight: FontWeight.w900)), Text(subtitle, style: const TextStyle(color: Colors.white54, fontSize: 11))])),
+    ])),
+  );
 }

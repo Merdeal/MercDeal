@@ -4,17 +4,59 @@ import '../../core/widgets/merc_widgets.dart';
 import '../../models/listing.dart';
 import '../checkout/checkout_screen.dart';
 
-class ListingDetailScreen extends StatefulWidget { final Listing listing; const ListingDetailScreen({super.key,required this.listing}); @override State<ListingDetailScreen> createState()=>_ListingDetailScreenState(); }
-class _ListingDetailScreenState extends State<ListingDetailScreen>{ bool following=false;
- @override Widget build(BuildContext c){final x=widget.listing;return Scaffold(appBar:AppBar(title:const Text('Affare',style:TextStyle(fontWeight:FontWeight.w900)),actions:[IconButton(onPressed:()=>setState(()=>following=!following),icon:Icon(following?Icons.favorite_rounded:Icons.favorite_border_rounded,color:following?MercDealTheme.green:null))]),body:ListView(padding:const EdgeInsets.fromLTRB(18,4,18,30),children:[
-  Container(height:260,decoration:BoxDecoration(borderRadius:BorderRadius.circular(28),gradient:const LinearGradient(begin:Alignment.topLeft,end:Alignment.bottomRight,colors:[Color(0xFF15384C),Color(0xFF08131F)]),border:Border.all(color:Colors.white.withValues(alpha:.06))),child:Center(child:Icon(x.icon,size:104,color:MercDealTheme.green))),const SizedBox(height:16),
-  Row(children:[Expanded(child:Text(x.title,style:const TextStyle(fontSize:26,fontWeight:FontWeight.w900))),if(x.verifiedSeller)const Icon(Icons.verified_rounded,color:MercDealTheme.green)]),Text('${x.category} · ${x.location}',style:const TextStyle(color:Colors.white38)),const SizedBox(height:15),
-  if(x.mode==SaleMode.descendingAuction)_auction(x) else _price(x),const SizedBox(height:14),
-  Container(padding:const EdgeInsets.all(16),decoration:BoxDecoration(color:MercDealTheme.card,borderRadius:BorderRadius.circular(20)),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('🟢 Venditore verificato',style:TextStyle(color:MercDealTheme.green,fontWeight:FontWeight.w900)),const SizedBox(height:7),Text('Condizioni: ${_condition(x.condition)}',style:const TextStyle(color:Colors.white60)),const SizedBox(height:5),Text(x.inShowcase?'💎 In Vetrina · 7 giorni':'MercDeal Protection disponibile',style:const TextStyle(color:Colors.white60))])),const SizedBox(height:14),
-  Row(children:[Expanded(child:GlowButton(label:'Fai un’offerta',icon:Icons.handshake_rounded,secondary:true,onPressed:()=>_offer(c,x))),const SizedBox(width:9),Expanded(child:GlowButton(label:'Compralo',icon:Icons.shopping_cart_checkout_rounded,onPressed:()=>Navigator.push(c,MaterialPageRoute(builder:(_)=>CheckoutScreen(listing:x)))))])
- ]));}
- Widget _auction(Listing x)=>Container(padding:const EdgeInsets.all(18),decoration:BoxDecoration(borderRadius:BorderRadius.circular(22),gradient:const LinearGradient(colors:[Color(0xFF0E2B28),Color(0xFF0B1C2B)]),border:Border.all(color:MercDealTheme.green.withValues(alpha:.2))),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('📉 ASTA AL RIBASSO',style:TextStyle(color:MercDealTheme.green,fontWeight:FontWeight.w900,letterSpacing:1)),const SizedBox(height:5),Text('€${x.price.toStringAsFixed(2).replaceAll('.',',')}',style:const TextStyle(fontSize:38,fontWeight:FontWeight.w900)),const Text('−€0,20 al giorno · minimo del venditore nascosto',style:TextStyle(color:Colors.white38,fontSize:11)),const SizedBox(height:14),ClipRRect(borderRadius:BorderRadius.circular(8),child:LinearProgressIndicator(value:x.progress,minHeight:8,backgroundColor:Colors.white10,color:MercDealTheme.green)),const SizedBox(height:10),Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children:[Text('Partenza €${x.startPrice.toStringAsFixed(2).replaceAll('.',',')}',style:const TextStyle(color:Colors.white30,fontSize:10)),Text('${x.followers} persone la seguono',style:const TextStyle(color:Colors.white60,fontSize:10,fontWeight:FontWeight.w700))])]));
- Widget _price(Listing x)=>Container(padding:const EdgeInsets.all(18),decoration:BoxDecoration(color:MercDealTheme.card,borderRadius:BorderRadius.circular(22)),child:Text('€${x.price.toStringAsFixed(2).replaceAll('.',',')}',style:const TextStyle(fontSize:38,fontWeight:FontWeight.w900)));
- String _condition(ListingCondition c)=>switch(c){ListingCondition.newItem=>'Nuovo',ListingCondition.excellent=>'Ottime condizioni',ListingCondition.good=>'Buone condizioni',ListingCondition.fair=>'Condizioni discrete'};
- void _offer(BuildContext c,Listing x){final ctl=TextEditingController();showModalBottomSheet(context:c,isScrollControlled:true,backgroundColor:MercDealTheme.card,builder:(_)=>Padding(padding:EdgeInsets.fromLTRB(18,18,18,MediaQuery.of(c).viewInsets.bottom+20),child:Column(mainAxisSize:MainAxisSize.min,crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('Fai un’offerta',style:TextStyle(fontSize:24,fontWeight:FontWeight.w900)),const SizedBox(height:7),const Text('Prima di inviare vedrai sempre spedizione e totale.',style:TextStyle(color:Colors.white38)),const SizedBox(height:13),TextField(controller:ctl,keyboardType:TextInputType.number,decoration:const InputDecoration(prefixText:'€ ',hintText:'Importo')),const SizedBox(height:13),GlowButton(label:'Continua al riepilogo',icon:Icons.arrow_forward_rounded,onPressed:()=>Navigator.pop(c))])));}
+class ListingDetailScreen extends StatefulWidget {
+  final Listing listing;
+  const ListingDetailScreen({super.key, required this.listing});
+  @override State<ListingDetailScreen> createState()=>_ListingDetailScreenState();
+}
+class _ListingDetailScreenState extends State<ListingDetailScreen> {
+  bool following=false;
+  @override Widget build(BuildContext context){
+    final x=widget.listing;
+    return Scaffold(
+      appBar:AppBar(actions:[
+        IconButton(onPressed:()=>setState(()=>following=!following),icon:Icon(following?Icons.favorite:Icons.favorite_border,color:following?MercDealTheme.green:null)),
+        IconButton(onPressed:()=>ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Annuncio condiviso'))),icon:const Icon(Icons.share_rounded)),
+      ]),
+      body:ListView(
+        padding:const EdgeInsets.fromLTRB(16,0,16,30),
+        children:[
+          Stack(children:[
+            ClipRRect(borderRadius:BorderRadius.circular(26),child:Image.asset('assets/images/${x.asset}',height:290,width:double.infinity,fit:BoxFit.cover)),
+            Positioned(left:12,top:12,child:PriceBadge(x.dropLabel)),
+            const Positioned(right:12,bottom:12,child:PriceBadge('1/6')),
+          ]),
+          const SizedBox(height:14),
+          Text(x.title,style:const TextStyle(fontSize:25,fontWeight:FontWeight.w900)),
+          Text('${x.category} · ${x.location} · Come nuovo',style:const TextStyle(color:Colors.white54)),
+          const SizedBox(height:9),
+          Row(children:[Text(x.oldPriceLabel,style:const TextStyle(color:Colors.white38,decoration:TextDecoration.lineThrough)),const SizedBox(width:10),Text(x.priceLabel,style:const TextStyle(color:MercDealTheme.green,fontSize:29,fontWeight:FontWeight.w900)),const SizedBox(width:9),PriceBadge(x.dropLabel)]),
+          const SizedBox(height:12),
+          const GlassCard(glow:true,child:Row(children:[Icon(Icons.timer_outlined,color:MercDealTheme.green),SizedBox(width:10),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('Prossima riduzione',style:TextStyle(fontWeight:FontWeight.w900)),Text('tra 00:12:34 · nuovo ribasso giornaliero',style:TextStyle(color:MercDealTheme.green,fontWeight:FontWeight.w800,fontSize:11))]))])),
+          const SizedBox(height:12),
+          Row(children:[
+            Expanded(child:FilledButton.icon(onPressed:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>CheckoutScreen(listing:x))),icon:const Icon(Icons.shopping_cart_rounded),label:Text('Compra ora\n${x.priceLabel}',textAlign:TextAlign.center),style:FilledButton.styleFrom(backgroundColor:MercDealTheme.green,foregroundColor:Colors.black,minimumSize:const Size.fromHeight(58)))),
+            const SizedBox(width:8),
+            Expanded(child:OutlinedButton.icon(onPressed:()=>_offer(context),icon:const Icon(Icons.gavel_rounded),label:const Text('Fai un’offerta'),style:OutlinedButton.styleFrom(minimumSize:const Size.fromHeight(58)))),
+          ]),
+          const SizedBox(height:8),
+          OutlinedButton.icon(onPressed:()=>setState(()=>following=!following),icon:Icon(following?Icons.favorite:Icons.favorite_border),label:Text(following?'Stai seguendo questo affare':'Segui l’affare'),style:OutlinedButton.styleFrom(minimumSize:const Size.fromHeight(50))),
+          const SizedBox(height:12),
+          Row(children:[_metric(Icons.visibility_outlined,'124','visualizzazioni'),_metric(Icons.people_outline,'${x.followers}','lo seguono'),_metric(Icons.gavel_rounded,'${x.offers}','offerte')]),
+          const SizedBox(height:12),
+          const GlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('Venditore',style:TextStyle(fontSize:18,fontWeight:FontWeight.w900)),SizedBox(height:10),Row(children:[CircleAvatar(backgroundColor:MercDealTheme.card2,child:Icon(Icons.person_rounded)),SizedBox(width:10),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('Venditore verificato',style:TextStyle(fontWeight:FontWeight.w900)),Text('🟢 ✓ Profilo verificato · reputazione reale',style:TextStyle(color:MercDealTheme.green,fontSize:11))]))])])),
+          const SizedBox(height:10),
+          _info('🚚 Spedizione','Disponibile · costo visibile prima dell’acquisto'),
+          _info('📍 Ritiro a mano','Disponibile · punto deciso dal venditore'),
+          _info('🛡️ Pagamento protetto','Per spedizioni il pagamento segue il flusso protetto MercDeal'),
+          _info('📹 MercDeal Proof','Video imballaggio massimo 1 minuto collegato all’ordine'),
+          const SizedBox(height:8),
+          const GlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('Descrizione',style:TextStyle(fontSize:18,fontWeight:FontWeight.w900)),SizedBox(height:7),Text('Articolo in condizioni come da foto. Il venditore dichiara che l’oggetto è conforme alla descrizione. Le prove private, quando previste, vengono collegate al dossier dell’ordine.',style:TextStyle(color:Colors.white70,height:1.45)),SizedBox(height:9),Text('📉 Asta al ribasso: il prezzo scende secondo le regole dell’annuncio fino al minimo impostato dal venditore.',style:TextStyle(color:MercDealTheme.green,fontWeight:FontWeight.w800,fontSize:11))])),
+        ],
+      ),
+    );
+  }
+  Widget _metric(IconData icon,String value,String label)=>Expanded(child:Column(children:[Icon(icon,color:MercDealTheme.green),Text(value,style:const TextStyle(fontWeight:FontWeight.w900)),Text(label,style:const TextStyle(color:Colors.white38,fontSize:9))]));
+  Widget _info(String title,String text)=>Padding(padding:const EdgeInsets.only(bottom:8),child:GlassCard(child:Row(children:[Text(title,style:const TextStyle(fontWeight:FontWeight.w900)),const SizedBox(width:8),Expanded(child:Text(text,textAlign:TextAlign.right,style:const TextStyle(color:Colors.white54,fontSize:10)))])));
+  void _offer(BuildContext context){final controller=TextEditingController();showModalBottomSheet(context:context,isScrollControlled:true,backgroundColor:MercDealTheme.card,builder:(sheet)=>Padding(padding:EdgeInsets.only(left:20,right:20,top:20,bottom:MediaQuery.of(sheet).viewInsets.bottom+20),child:Column(mainAxisSize:MainAxisSize.min,crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('Fai un’offerta',style:TextStyle(fontSize:24,fontWeight:FontWeight.w900)),const SizedBox(height:5),const Text('Prima di confermare vedrai anche il costo di spedizione per la destinazione scelta.',style:TextStyle(color:Colors.white54,fontSize:11)),const SizedBox(height:10),TextField(controller:controller,keyboardType:TextInputType.number,decoration:const InputDecoration(prefixText:'€ ',labelText:'La tua offerta')),const SizedBox(height:12),GlowButton(label:'Invia proposta',icon:Icons.send_rounded,onPressed:(){Navigator.pop(sheet);ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Offerta inviata al venditore')));})])));}
 }
